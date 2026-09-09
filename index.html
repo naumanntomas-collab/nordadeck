@@ -703,6 +703,51 @@ nav.scrolled::after{transform:scaleX(1)}
 }
 .btn-arrow{font-size:18px;transition:transform .3s}
 .btn-submit-v2:hover .btn-arrow{transform:translateX(6px)}
+/* ── WHATSAPP FLOAT ─────────────────────────────────────── */
+.wa-float{
+  position:fixed;bottom:28px;right:28px;z-index:600;
+  width:58px;height:58px;border-radius:50%;
+  background:#25D366;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 24px rgba(0,0,0,.35);
+  transition:transform .25s, box-shadow .25s;
+  text-decoration:none;
+}
+.wa-float:hover{transform:scale(1.08);box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.wa-float svg{width:30px;height:30px}
+.wa-float-pulse{
+  position:absolute;inset:0;border-radius:50%;
+  background:#25D366;opacity:.55;
+  animation:waPulse 2.4s ease-out infinite;
+}
+@keyframes waPulse{
+  0%{transform:scale(1);opacity:.55}
+  100%{transform:scale(1.8);opacity:0}
+}
+@media(max-width:680px){
+  .wa-float{width:52px;height:52px;bottom:20px;right:20px}
+  .wa-float svg{width:26px;height:26px}
+}
+.btn-whatsapp{
+  display:inline-flex;align-items:center;gap:14px;
+  background:#25D366;border:1px solid #25D366;
+  color:#fff;
+  padding:16px 32px;
+  font-family:'Inter',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:3px;
+  text-transform:uppercase;cursor:pointer;text-decoration:none;
+  transition:all .3s;
+}
+.btn-whatsapp:hover{background:#1ebe57;border-color:#1ebe57}
+.btn-whatsapp svg{width:18px;height:18px}
+.contact-alt-divider{
+  display:flex;align-items:center;gap:16px;margin:28px 0;
+  color:rgba(232,228,220,.4);font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;
+}
+.contact-alt-divider::before,.contact-alt-divider::after{
+  content:'';flex:1;height:1px;background:var(--line-w);
+}
 .contact-info{
   padding-top:80px;
 }
@@ -1217,6 +1262,11 @@ footer{
           <span class="btn-arrow">→</span>
         </button>
       </form>
+      <div class="contact-alt-divider">o</div>
+      <a href="https://wa.me/34654656949?text=Hola%2C%20me%20gustar%C3%ADa%20solicitar%20un%20presupuesto%20para%20mi%20barco" target="_blank" rel="noopener" class="btn-whatsapp">
+        <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.87.5 3.62 1.44 5.13L2 22l5.13-1.55a9.86 9.86 0 0 0 4.91 1.32h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.78 14.05c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.05.11-1.7-.11-.39-.13-.9-.3-1.54-.58-2.72-1.18-4.49-3.9-4.63-4.09-.14-.19-1.1-1.47-1.1-2.8 0-1.33.7-1.98.95-2.25.24-.27.53-.34.7-.34.18 0 .35 0 .5.01.16.01.38-.06.6.46.24.56.79 1.94.86 2.08.07.14.12.31.02.5-.1.19-.16.31-.31.48-.15.17-.31.38-.44.51-.14.14-.29.29-.13.57.17.29.76 1.25 1.62 2.02 1.12 1 2.06 1.31 2.35 1.46.29.14.46.12.63-.07.17-.19.72-.83.92-1.12.19-.29.38-.24.63-.14.26.09 1.63.77 1.91.91.28.14.47.21.54.33.07.12.07.68-.17 1.36Z"/></svg>
+        Escríbenos por WhatsApp
+      </a>
     </div>
   </div>
 </section>
@@ -1357,9 +1407,12 @@ function submitForm(e) {
   btn.disabled = true;
   label.textContent = 'Enviando...';
 
+  const formData = new FormData(form);
+  formData.append('_url', window.location.href);
+
   fetch(form.action, {
     method: 'POST',
-    body: new FormData(form),
+    body: formData,
     headers: { 'Accept': 'application/json' }
   })
     .then(res => {
@@ -1394,5 +1447,11 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 </script>
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/34654656949?text=Hola%2C%20me%20gustar%C3%ADa%20solicitar%20un%20presupuesto%20para%20mi%20barco" target="_blank" rel="noopener" class="wa-float" aria-label="Escríbenos por WhatsApp">
+  <span class="wa-float-pulse"></span>
+  <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.87.5 3.62 1.44 5.13L2 22l5.13-1.55a9.86 9.86 0 0 0 4.91 1.32h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm5.78 14.05c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.05.11-1.7-.11-.39-.13-.9-.3-1.54-.58-2.72-1.18-4.49-3.9-4.63-4.09-.14-.19-1.1-1.47-1.1-2.8 0-1.33.7-1.98.95-2.25.24-.27.53-.34.7-.34.18 0 .35 0 .5.01.16.01.38-.06.6.46.24.56.79 1.94.86 2.08.07.14.12.31.02.5-.1.19-.16.31-.31.48-.15.17-.31.38-.44.51-.14.14-.29.29-.13.57.17.29.76 1.25 1.62 2.02 1.12 1 2.06 1.31 2.35 1.46.29.14.46.12.63-.07.17-.19.72-.83.92-1.12.19-.29.38-.24.63-.14.26.09 1.63.77 1.91.91.28.14.47.21.54.33.07.12.07.68-.17 1.36Z"/></svg>
+</a>
+
 </body>
 </html>
