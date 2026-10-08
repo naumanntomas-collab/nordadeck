@@ -1426,6 +1426,11 @@ footer{
         <div class="testimonial-quote">"</div>
         <p class="testimonial-text">Fue todo perfectísimo, rapidez y muy buen trabajo. Lo recomiendo. Cranchi CSL27.</p>
         <div class="testimonial-author"><div class="testimonial-avatar">F</div><div><p class="testimonial-name">Francisco</p><p class="testimonial-role">Cranchi CSL27 · Google Reviews</p></div></div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">Muy profesionales, rápidos y serios. Recomendable 100%.</p>
+        <div class="testimonial-author"><div class="testimonial-avatar">A</div><div><p class="testimonial-name">Alex</p><p class="testimonial-role">Google Reviews · ★★★★★</p></div></div>
       </div>
     </div>
   </div>
@@ -1731,12 +1736,24 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
 <script>
 (function(){
+  function openLightbox(src, alt){
+    document.getElementById('sampleLightboxImg').src = src;
+    document.getElementById('sampleLightboxImg').alt = alt || '';
+    document.getElementById('sampleLightbox').classList.add('open');
+  }
+  // Sample cards
   document.querySelectorAll('.resina-sample-card').forEach(function(card){
     card.addEventListener('click', function(){
       var img = card.querySelector('img');
-      document.getElementById('sampleLightboxImg').src = img.src;
-      document.getElementById('sampleLightboxImg').alt = img.alt;
-      document.getElementById('sampleLightbox').classList.add('open');
+      openLightbox(img.src, img.alt);
+    });
+  });
+  // Work/project photos
+  document.querySelectorAll('.work-item').forEach(function(item){
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', function(){
+      var img = item.querySelector('.work-img');
+      if(img) openLightbox(img.src, img.alt);
     });
   });
 })();
