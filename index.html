@@ -982,6 +982,11 @@ footer{
 
 </style>
 <style>
+@media(max-width:768px),(hover:none),(pointer:coarse){
+ #cursor,#cursorRing{display:none!important}
+ body{cursor:auto}
+}
+
 .language-rail{position:absolute;right:18px;top:var(--language-rail-top,40vh);z-index:10;display:flex;flex-direction:column;gap:8px;padding:8px;border:1px solid rgba(200,146,79,.25);border-radius:12px;background:rgba(5,12,24,.78);backdrop-filter:blur(12px);box-shadow:0 8px 28px rgba(0,0,0,.2)}
 .language-rail button{display:flex;align-items:center;justify-content:center;width:52px;height:48px;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--cream);cursor:pointer;font:32px/1 "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;transition:background .2s,border-color .2s}
 .language-rail button:hover{background:rgba(200,146,79,.15)}
@@ -1582,41 +1587,39 @@ window.addEventListener('load', () => {
 });
 
 // ── CURSOR ────────────────────────────────────────────────
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
-
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
-});
-
-function animRing() {
-  rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
-  ring.style.left = rx + 'px';
-  ring.style.top = ry + 'px';
-  requestAnimationFrame(animRing);
-}
-animRing();
-
-document.querySelectorAll('a,button').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cursor.style.width = '16px';
-    cursor.style.height = '16px';
-    ring.style.width = '60px';
-    ring.style.height = '60px';
-    ring.style.borderColor = 'rgba(200,146,79,.8)';
+(()=>{
+ const cursor=document.getElementById('cursor');
+ const ring=document.getElementById('cursorRing');
+ const media=window.matchMedia('(min-width: 769px) and (hover: hover) and (pointer: fine)');
+ let frame=null,mx=0,my=0,rx=0,ry=0;
+ function animate(){
+  if(!media.matches){frame=null;return;}
+  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  frame=requestAnimationFrame(animate);
+ }
+ function sync(){
+  if(frame!==null){cancelAnimationFrame(frame);frame=null;}
+  if(media.matches)animate();
+ }
+ document.addEventListener('mousemove',e=>{
+  if(!media.matches)return;
+  mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';
+ });
+ document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+   if(!media.matches)return;
+   cursor.style.width=cursor.style.height='16px';
+   ring.style.width=ring.style.height='60px';ring.style.borderColor='rgba(200,146,79,.8)';
   });
-  el.addEventListener('mouseleave', () => {
-    cursor.style.width = '8px';
-    cursor.style.height = '8px';
-    ring.style.width = '36px';
-    ring.style.height = '36px';
-    ring.style.borderColor = 'rgba(200,146,79,.5)';
+  el.addEventListener('mouseleave',()=>{
+   cursor.style.width=cursor.style.height='8px';
+   ring.style.width=ring.style.height='36px';ring.style.borderColor='rgba(200,146,79,.5)';
   });
-});
+ });
+ if(media.addEventListener)media.addEventListener('change',sync);else media.addListener(sync);
+ sync();
+})();
 
 // ── NAVBAR ────────────────────────────────────────────────
 const navbar = document.getElementById('navbar');
